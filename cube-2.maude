@@ -1,0 +1,120 @@
+--- COLOR 没问题
+fmod COLOR is
+    protecting DOUBLE .
+    sorts Color Colors .
+    ops C1 C2 C3 C4 C5 C6 : -> Color . --- 六个面六个颜色
+    op ____ : Color Color Color Color -> Colors . --- 九个块的颜色
+    op get : Colors Nat -> Color .
+    vars CL1 CL2 CL3 CL4 A : Color .
+    vars clsA clsB : Colors .
+    vars X Y Z I J K : Nat .
+    eq get((CL1 CL2 CL3 CL4), 1) = CL1 .
+    eq get((CL1 CL2 CL3 CL4), 2) = CL2 .
+    eq get((CL1 CL2 CL3 CL4), 3) = CL3 .
+    eq get((CL1 CL2 CL3 CL4), 4) = CL4 .
+
+    op set : Colors Nat Color -> Colors .
+    eq set((CL1 CL2 CL3 CL4 ), 1, A) = (A CL2 CL3 CL4 ) .
+    eq set((CL1 CL2 CL3 CL4 ), 2, A) = (CL1 A CL3 CL4 ) .
+    eq set((CL1 CL2 CL3 CL4 ), 3, A) = (CL1 CL2 A CL4 ) .
+    eq set((CL1 CL2 CL3 CL4 ), 4, A) = (CL1 CL2 CL3 A ) .
+    
+    op SetThroughDouble : Colors Double Colors Double -> Colors .
+    eq SetThroughDouble(clsA, (X Y), clsB, (I J)) = set(set(clsA, X, get(clsB, I)), Y, get(clsB, J)) .
+    --- reduce SetThroughDouble(C1 C1 C1 C1 C1 C1 C1 C1 C1, 1 4 3, C2 C2 C2 C2 C2 C2 C2 C2 C2, 1 2 3) .
+    --- reduce (C1 C1 C1 C1 C1 C1 C1 C1 C1) .
+    op allSame : Colors -> Bool .
+    eq allSame((A A A A)) = true .
+    eq allSame(clsA) = false [owise] .
+endfm
+
+mod CUBE-2 is
+    protecting COLOR .
+    including NEIGHBOR-2 .
+    including MODEL-CHECKER .
+    including LTL-SIMPLIFIER .
+    sort Face .
+    op face : Nat -> Face .
+    op f[_]:_ : Face Colors -> State .
+    op __ : State State -> State  [assoc comm] .
+    
+    ops init SS : -> State .
+    eq init = (
+    (f[face(1)]: C2 C2 C1 C1)
+    (f[face(2)]: C2 C2 C6 C6)
+    (f[face(3)]: C3 C3 C3 C3)
+    (f[face(4)]: C1 C1 C4 C4)
+    (f[face(5)]: C5 C5 C5 C5)
+    (f[face(6)]: C4 C4 C6 C6)
+    ) .
+
+    --- eq SS = (
+    --- (f[face(1)]: C2 C2 C1 C1)
+    --- (f[face(2)]: C2 C2 C6 C6)
+    --- (f[face(3)]: C3 C3 C3 C3)
+    --- (f[face(4)]: C1 C1 C4 C4)
+    --- (f[face(5)]: C5 C5 C5 C5)
+    --- (f[face(6)]: C4 C4 C6 C6)
+    --- ) .
+    eq SS = (
+    (f[face(1)]: C1 C1 C1 C1)
+    (f[face(2)]: C2 C2 C2 C2)
+    (f[face(3)]: C3 C3 C3 C3)
+    (f[face(4)]: C4 C4 C4 C4)
+    (f[face(5)]: C5 C5 C5 C5)
+    (f[face(6)]: C6 C6 C6 C6)
+    ) .
+    vars CT1 CT2 CT3 CT4 CT5 CT6 : Color .
+    vars CR CRT CRR CRB CRL CRD : Colors .
+    var N TOP BOTTOM LEFT RIGHT BACK : Nat .
+    var X : State .
+    var P : Prop .
+
+
+    op rotateCW : Colors -> Colors . --- 顺时针旋转一个面
+    eq rotateCW((CT1 CT2 CT3 CT4)) = (CT3 CT1 CT4 CT2) .
+
+    op rotateCCW : Colors -> Colors . --- 逆时针旋转一个面
+    eq rotateCCW((CT1 CT2 CT3 CT4)) = (CT2 CT4 CT1 CT3) .
+
+    --- op success : -> Prop .
+    --- ceq ((f[face(1)]: CR) (f[face(2)]: CRT) (f[face(3)]: CRR) (f[face(4)]: CRB) (f[face(5)]: CRL) (f[face(6)]: CRD) |= success) = true if allSame(CR) and allSame(CRT) and allSame(CRR) and allSame(CRB) and allSame(CRL) and allSame(CRD) .
+
+    op success : State -> Bool .
+    ceq success((f[face(1)]: CR) (f[face(2)]: CRT) (f[face(3)]: CRR) (f[face(4)]: CRB) (f[face(5)]: CRL) (f[face(6)]: CRD)) = true if allSame(CR) and allSame(CRT) and allSame(CRR) and allSame(CRB) and allSame(CRL) and allSame(CRD) .
+    eq success(X) = false [owise] .
+    --- rl [RotateSelf] : (f[face(N)]: CR)  => (f[face(N)]: rotateCW(CR)) .
+    --- 定义面的顺时针旋转
+    crl [RotateClockWise] : 
+      (f[face(N)]: CR) 
+      (f[face(TOP)]: CRT) 
+      (f[face(RIGHT)]: CRR)
+      (f[face(BOTTOM)]: CRB)
+      (f[face(LEFT)]: CRL) 
+      => 
+      (f[face(N)]: rotateCW(CR)) 
+      (f[face(TOP)]: SetThroughDouble(CRT, adjacent(N, TOP), CRL, adjacent(N, LEFT))) 
+      (f[face(RIGHT)]: SetThroughDouble(CRR, adjacent(N, RIGHT), CRT, adjacent(N, TOP))) 
+      (f[face(BOTTOM)]: SetThroughDouble(CRB, adjacent(N, BOTTOM), CRR, adjacent(N, RIGHT))) 
+      (f[face(LEFT)]: SetThroughDouble(CRL, adjacent(N, LEFT), CRB, adjacent(N, BOTTOM))) 
+      if (TOP == topNeighbor(N) and BOTTOM == bottomNeighbor(N) and RIGHT == rightNeighbor(N) and LEFT == leftNeighbor(N)) .
+      --- if false .
+
+    --- 定义面的逆时针旋转
+    crl [RotateCounterClockWise]  : (
+      (f[face(N)]: CR) 
+      (f[face(TOP)]: CRT)
+      (f[face(RIGHT)]: CRR)
+      (f[face(BOTTOM)]: CRB)
+      (f[face(LEFT)]: CRL)
+      ) 
+      => 
+      (
+      (f[face(N)]: rotateCCW(CR)) 
+      (f[face(TOP)]: SetThroughDouble(CRT, adjacent(N, TOP), CRR, adjacent(N, RIGHT))) 
+      (f[face(RIGHT)]: SetThroughDouble(CRR, adjacent(N, RIGHT), CRB, adjacent(N, BOTTOM))) 
+      (f[face(BOTTOM)]: SetThroughDouble(CRB, adjacent(N, BOTTOM), CRL, adjacent(N, LEFT))) 
+      (f[face(LEFT)]: SetThroughDouble(CRL, adjacent(N, LEFT), CRT, adjacent(N, TOP))) 
+      ) if (TOP == topNeighbor(N) and BOTTOM == bottomNeighbor(N) and RIGHT == rightNeighbor(N) and LEFT == leftNeighbor(N)) .
+      --- ) if false .
+endm

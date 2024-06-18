@@ -1,0 +1,68 @@
+fmod NEIGHBOR-2 is 
+  protecting DOUBLE .
+    op topNeighbor : Nat -> Nat .
+    eq topNeighbor(1) = 3 .
+    eq topNeighbor(2) = 5 .
+    eq topNeighbor(3) = 2 .
+    eq topNeighbor(4) = 3 .
+    eq topNeighbor(5) = 4 .
+    eq topNeighbor(6) = 3 .
+
+    op bottomNeighbor : Nat -> Nat .
+    eq bottomNeighbor(1) = 5 .
+    eq bottomNeighbor(2) = 3 .
+    eq bottomNeighbor(3) = 4 .
+    eq bottomNeighbor(4) = 5 .
+    eq bottomNeighbor(5) = 2 .
+    eq bottomNeighbor(6) = 5 .
+
+    op leftNeighbor : Nat -> Nat .
+    eq leftNeighbor(1) = 2 .
+    eq leftNeighbor(2) = 1 .
+    eq leftNeighbor(3) = 1 .
+    eq leftNeighbor(4) = 1 .
+    eq leftNeighbor(5) = 1 .
+    eq leftNeighbor(6) = 4 .
+
+    op rightNeighbor : Nat -> Nat .
+    eq rightNeighbor(1) = 4 .
+    eq rightNeighbor(2) = 6 .
+    eq rightNeighbor(3) = 6 .
+    eq rightNeighbor(4) = 6 .
+    eq rightNeighbor(5) = 6 .
+    eq rightNeighbor(6) = 2 .
+
+    op backNeighbor : Nat -> Nat .
+    eq backNeighbor(1) = 6 .
+    eq backNeighbor(2) = 4 .
+    eq backNeighbor(3) = 5 .
+    eq backNeighbor(4) = 2 .
+    eq backNeighbor(5) = 3 .
+    eq backNeighbor(6) = 1 .
+
+    op adjacent : Nat Nat -> Double .
+    eq adjacent(1, 3) = 1 3 .
+    eq adjacent(1, 5) = 1 3 .
+    eq adjacent(1, 2) = 1 3 .
+    eq adjacent(1, 4) = 1 3 .
+    eq adjacent(2, 5) = 3 4 .
+    eq adjacent(2, 3) = 2 1 .
+    eq adjacent(2, 1) = 1 3 .
+    eq adjacent(2, 6) = 4 2 .
+    eq adjacent(3, 2) = 3 4 .
+    eq adjacent(3, 4) = 2 1 .
+    eq adjacent(3, 1) = 2 1 .
+    eq adjacent(3, 6) = 2 1 .
+    eq adjacent(4, 3) = 3 4 .
+    eq adjacent(4, 5) = 2 1 .
+    eq adjacent(4, 1) = 4 2 .
+    eq adjacent(4, 6) = 1 3 .
+    eq adjacent(5, 4) = 3 4 .
+    eq adjacent(5, 2) = 2 1 .
+    eq adjacent(5, 1) = 3 4 .
+    eq adjacent(5, 6) = 3 4 .
+    eq adjacent(6, 3) = 4 2 .
+    eq adjacent(6, 5) = 4 2 .
+    eq adjacent(6, 4) = 4 2 .
+    eq adjacent(6, 2) = 4 2 .
+endfm

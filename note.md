@@ -12,6 +12,13 @@ load neighbor.maude .
 load cube.maude .
 ```
 
+```maude
+load /home/ZhangXingYi/local/maude/model-checker.maude .
+load double.maude .
+load neighbor-2.maude .
+load cube-2.maude .
+```
+
 
 3. 查找是否存在饥饿
 

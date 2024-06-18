@@ -1,0 +1,5 @@
+fmod DOUBLE is 
+  protecting NAT .
+  sort Double .
+  op __ : Nat Nat -> Double .
+endfm
