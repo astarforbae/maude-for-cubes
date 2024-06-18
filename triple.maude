@@ -1,0 +1,7 @@
+fmod TRIPLE is 
+  protecting NAT .
+  sort Triple .
+  op ___ : Nat Nat Nat -> Triple .
+  op get : Triple Nat -> Nat .
+  vars A B C : Nat .
+endfm

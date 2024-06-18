@@ -1,0 +1,143 @@
+--- COLOR 没问题
+fmod COLOR is
+    protecting TRIPLE .
+    sorts Color Colors .
+    ops C1 C2 C3 C4 C5 C6 : -> Color . --- 六个面六个颜色
+    op _________ : Color Color Color Color Color Color Color Color Color -> Colors . --- 九个块的颜色
+    op get : Colors Nat -> Color .
+    vars CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9 A : Color .
+    vars clsA clsB : Colors .
+    vars X Y Z I J K : Nat .
+    eq get((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 1) = CL1 .
+    eq get((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 2) = CL2 .
+    eq get((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 3) = CL3 .
+    eq get((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 4) = CL4 .
+    eq get((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 5) = CL5 .
+    eq get((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 6) = CL6 .
+    eq get((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 7) = CL7 .
+    eq get((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 8) = CL8 .
+    eq get((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 9) = CL9 .
+
+    op set : Colors Nat Color -> Colors .
+    eq set((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 1, A) = (A CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9) .
+    eq set((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 2, A) = (CL1 A CL3 CL4 CL5 CL6 CL7 CL8 CL9) .
+    eq set((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 3, A) = (CL1 CL2 A CL4 CL5 CL6 CL7 CL8 CL9) .
+    eq set((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 4, A) = (CL1 CL2 CL3 A CL5 CL6 CL7 CL8 CL9) .
+    eq set((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 5, A) = (CL1 CL2 CL3 CL4 A CL6 CL7 CL8 CL9) .
+    eq set((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 6, A) = (CL1 CL2 CL3 CL4 CL5 A CL7 CL8 CL9) .
+    eq set((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 7, A) = (CL1 CL2 CL3 CL4 CL5 CL6 A CL8 CL9) .
+    eq set((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 8, A) = (CL1 CL2 CL3 CL4 CL5 CL6 CL7 A CL9) .
+    eq set((CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 CL9), 9, A) = (CL1 CL2 CL3 CL4 CL5 CL6 CL7 CL8 A) .
+    op SetThroughTriple : Colors Triple Colors Triple -> Colors .
+    eq SetThroughTriple(clsA, (X Y Z), clsB, (I J K)) = set(set(set(clsA, X, get(clsB, I)), Y, get(clsB, J)), Z, get(clsB, K)) .
+    --- reduce SetThroughTriple(C1 C1 C1 C1 C1 C1 C1 C1 C1, 1 4 3, C2 C2 C2 C2 C2 C2 C2 C2 C2, 1 2 3) .
+    --- reduce (C1 C1 C1 C1 C1 C1 C1 C1 C1) .
+    op allSame : Colors -> Bool .
+    eq allSame((A A A A A A A A A)) = true .
+    eq allSame(clsA) = false [owise] .
+endfm
+
+mod CUBE is
+    protecting COLOR .
+    including NEIGHBOR .
+    including MODEL-CHECKER .
+    including LTL-SIMPLIFIER .
+    sort Face .
+    op face : Nat -> Face .
+    op f[_]:_ : Face Colors -> State .
+    op __ : State State -> State  [assoc comm] .
+    
+    op init : -> State .
+    eq init = (
+    (f[face(1)]: C1 C1 C1 C1 C1 C1 C1 C1 C1)
+    (f[face(2)]: C2 C2 C2 C2 C2 C2 C2 C2 C2)
+    (f[face(3)]: C3 C3 C3 C3 C3 C3 C3 C3 C3)
+    (f[face(4)]: C4 C4 C4 C4 C4 C4 C4 C4 C4)
+    (f[face(5)]: C5 C5 C5 C5 C5 C5 C5 C5 C5)
+    (f[face(6)]: C6 C6 C6 C6 C6 C6 C6 C6 C6)
+    ) .
+
+    vars CT1 CT2 CT3 CT4 CT5 CT6 CT7 CT8 CT9 : Color .
+    vars CR CRT CRR CRB CRL CRD : Colors .
+    var N TOP BOTTOM LEFT RIGHT BACK : Nat .
+    var X : State .
+    var P : Prop .
+
+
+    op rotateCW : Colors -> Colors . --- 顺时针旋转一个面
+    eq rotateCW((CT1 CT2 CT3 CT4 CT5 CT6 CT7 CT8 CT9)) = (CT7 CT4 CT1 CT8 CT5 CT2 CT9 CT6 CT3) .
+
+    op rotateCCW : Colors -> Colors . --- 逆时针旋转一个面
+    eq rotateCCW((CT1 CT2 CT3 CT4 CT5 CT6 CT7 CT8 CT9)) = (CT3 CT6 CT9 CT2 CT5 CT8 CT1 CT4 CT7) .
+
+    op success : State -> Prop .
+    eq ((f[face(1)]: CT1 CT1 CT1 CT1 CT1 CT1 CT1 CT1 CT1) (f[face(2)]: CT2 CT2 CT2 CT2 CT2 CT2 CT2 CT2 CT2) (f[face(3)]: CT3 CT3 CT3 CT3 CT3 CT3 CT3 CT3 CT3) (f[face(4)]: CT4 CT4 CT4 CT4 CT4 CT4 CT4 CT4 CT4) (f[face(5)]: CT5 CT5 CT5 CT5 CT5 CT5 CT5 CT5 CT5) (f[face(6)]: CT6 CT6 CT6 CT6 CT6 CT6 CT6 CT6 CT6)) |= success(X) = true .
+    eq X |= P = false [owise] .
+    --- rl [Rotatetest] : f[face(N)]: CR 
+    --- =>
+    ---  f[face(N)]: rotateCW(CR) .
+    --- crl [Switch] : (f[face(N)]: CR) (f[face(M)]: CRT) => (f[face(N)]: CRT) (f[face(M)]: CR) if M == topNeighbor(N) .
+
+    --- rl [SwitchTop] : (f[face(topNeighbor(N))]: CR) => (f[face(topNeighbor(N))]: rotateCW(CR)).
+    --- 定义面的顺时针旋转
+    crl [RotateClockWise] : 
+      (f[face(N)]: CR) 
+      (f[face(TOP)]: CRT) 
+      (f[face(RIGHT)]: CRR)
+      (f[face(BOTTOM)]: CRB)
+      (f[face(LEFT)]: CRL) 
+      => 
+      (f[face(N)]: rotateCW(CR)) 
+      (f[face(TOP)]: SetThroughTriple(CRT, adjacent(N, TOP), CRL, adjacent(N, LEFT))) 
+      (f[face(RIGHT)]: SetThroughTriple(CRR, adjacent(N, RIGHT), CRT, adjacent(N, TOP))) 
+      (f[face(BOTTOM)]: SetThroughTriple(CRB, adjacent(N, BOTTOM), CRR, adjacent(N, RIGHT))) 
+      (f[face(LEFT)]: SetThroughTriple(CRL, adjacent(N, LEFT), CRB, adjacent(N, BOTTOM))) if (TOP == topNeighbor(N) and BOTTOM == bottomNeighbor(N) and RIGHT == rightNeighbor(N) and LEFT == leftNeighbor(N)) .
+
+    --- 定义面的逆时针旋转
+    crl [RotateCounterClockWise]  : (
+      (f[face(N)]: CR) 
+      (f[face(TOP)]: CRT)
+      (f[face(RIGHT)]: CRR)
+      (f[face(BOTTOM)]: CRB)
+      (f[face(LEFT)]: CRL)
+      ) 
+      => 
+      (
+      (f[face(N)]: rotateCCW(CR)) 
+      (f[face(TOP)]: SetThroughTriple(CRT, adjacent(N, TOP), CRR, adjacent(N, RIGHT))) 
+      (f[face(RIGHT)]: SetThroughTriple(CRR, adjacent(N, RIGHT), CRB, adjacent(N, BOTTOM))) 
+      (f[face(BOTTOM)]: SetThroughTriple(CRB, adjacent(N, BOTTOM), CRL, adjacent(N, LEFT))) 
+      (f[face(LEFT)]: SetThroughTriple(CRL, adjacent(N, LEFT), CRT, adjacent(N, TOP))) 
+      --- ) if (TOP == topNeighbor(N) and BOTTOM == bottomNeighbor(N) and RIGHT == rightNeighbor(N) and LEFT == leftNeighbor(N)) .
+      ) if false .
+    --- 定义竖边的向上旋转（不含边角块）
+    crl [RotateUp] : (
+      (f[face(N)]: CR) 
+      (f[face(TOP)]: CRT) 
+      (f[face(BOTTOM)]: CRD)
+      (f[face(BACK)]: CRB)
+      )
+      => 
+      (
+      (f[face(TOP)]: SetThroughTriple(CRT, verticalAdjacent(N, TOP), CR, verticalAdjacent(N, N)))
+      (f[face(BACK)]: SetThroughTriple(CRB, verticalAdjacent(N, BACK), CRT, verticalAdjacent(N, TOP)))
+      (f[face(BOTTOM)]: SetThroughTriple(CRD, verticalAdjacent(N, BOTTOM), CRB, verticalAdjacent(N, BACK)))
+      (f[face(N)]: SetThroughTriple(CR, verticalAdjacent(N, N), CRD, verticalAdjacent(N, BOTTOM))) 
+      --- )if (TOP == topNeighbor(N) and BOTTOM == bottomNeighbor(N) and BACK == backNeighbor(N)) .
+      ) if false .
+    --- 定义竖边的向下旋转（不含边角块）
+    crl [RotateDown] : (
+      (f[face(N)]: CR)
+      (f[face(TOP)]: CRT)
+      (f[face(BOTTOM)]: CRD)
+      (f[face(BACK)]: CRB)
+      ) 
+      => 
+      (
+      (f[face(TOP)]: SetThroughTriple(CRT, verticalAdjacent(N, TOP), CRB, verticalAdjacent(N, BACK))) 
+      (f[face(BACK)]: SetThroughTriple(CRB, verticalAdjacent(N, BACK), CRD, verticalAdjacent(N, BOTTOM))) 
+      (f[face(BOTTOM)]: SetThroughTriple(CRD, verticalAdjacent(N, BOTTOM), CR, verticalAdjacent(N, N))) 
+      (f[face(N)]: SetThroughTriple(CR, verticalAdjacent(N, N), CRT, verticalAdjacent(N, TOP))) 
+      --- )if (TOP == topNeighbor(N) and BOTTOM == bottomNeighbor(N) and BACK == backNeighbor(N)) .
+      ) if false .
+endm
