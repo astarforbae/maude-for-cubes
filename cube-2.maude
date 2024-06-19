@@ -2,7 +2,7 @@
 fmod COLOR is
     protecting DOUBLE .
     sorts Color Colors .
-    ops C1 C2 C3 C4 C5 C6 : -> Color . --- 六个面六个颜色
+    ops C1 C2 C3 C4 C5 C6 Y R B O G W : -> Color . --- 六个面六个颜色
     op ____ : Color Color Color Color -> Colors . --- 九个块的颜色
     op get : Colors Nat -> Color .
     vars CL1 CL2 CL3 CL4 A : Color .
@@ -38,32 +38,16 @@ mod CUBE-2 is
     op f[_]:_ : Face Colors -> State .
     op __ : State State -> State  [assoc comm] .
     
-    ops init SS : -> State .
+    ops init : -> State .
     eq init = (
-    (f[face(1)]: C2 C2 C1 C1)
-    (f[face(2)]: C2 C2 C6 C6)
-    (f[face(3)]: C3 C3 C3 C3)
-    (f[face(4)]: C1 C1 C4 C4)
-    (f[face(5)]: C5 C5 C5 C5)
-    (f[face(6)]: C4 C4 C6 C6)
+    (f[face(1)]: W G B B)
+    (f[face(2)]: R Y O Y)
+    (f[face(3)]: B R O R)
+    (f[face(4)]: W W R O)
+    (f[face(5)]: W B Y O)
+    (f[face(6)]: G G Y G)
     ) .
 
-    --- eq SS = (
-    --- (f[face(1)]: C2 C2 C1 C1)
-    --- (f[face(2)]: C2 C2 C6 C6)
-    --- (f[face(3)]: C3 C3 C3 C3)
-    --- (f[face(4)]: C1 C1 C4 C4)
-    --- (f[face(5)]: C5 C5 C5 C5)
-    --- (f[face(6)]: C4 C4 C6 C6)
-    --- ) .
-    eq SS = (
-    (f[face(1)]: C1 C1 C1 C1)
-    (f[face(2)]: C2 C2 C2 C2)
-    (f[face(3)]: C3 C3 C3 C3)
-    (f[face(4)]: C4 C4 C4 C4)
-    (f[face(5)]: C5 C5 C5 C5)
-    (f[face(6)]: C6 C6 C6 C6)
-    ) .
     vars CT1 CT2 CT3 CT4 CT5 CT6 : Color .
     vars CR CRT CRR CRB CRL CRD : Colors .
     var N TOP BOTTOM LEFT RIGHT BACK : Nat .
