@@ -52,7 +52,7 @@ mod CUBE is
     (f[face(3)]: R Y Y W R R W W W)
     (f[face(4)]: G G G G G O G G W)
     (f[face(5)]: Y Y B B O B B W Y)
-    (f[face(6)]: R Y O Y Y G O O Y)
+    (f[face(6)]: R Y O Y Y G O O G)
     ) .
 
     vars CT1 CT2 CT3 CT4 CT5 CT6 CT7 CT8 CT9 : Color .

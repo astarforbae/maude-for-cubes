@@ -40,12 +40,12 @@ mod CUBE-2 is
     
     ops init : -> State .
     eq init = (
-    (f[face(1)]: W G B B)
-    (f[face(2)]: R Y O Y)
-    (f[face(3)]: B R O R)
-    (f[face(4)]: W W R O)
-    (f[face(5)]: W B Y O)
-    (f[face(6)]: G G Y G)
+    (f[face(1)]: B G B W)
+    (f[face(2)]: O R R Y)
+    (f[face(3)]: W G W Y)
+    (f[face(4)]: R O G G)
+    (f[face(5)]: O Y W B)
+    (f[face(6)]: B O R Y)
     ) .
 
     vars CT1 CT2 CT3 CT4 CT5 CT6 : Color .
@@ -63,6 +63,9 @@ mod CUBE-2 is
 
     --- op success : -> Prop .
     --- ceq ((f[face(1)]: CR) (f[face(2)]: CRT) (f[face(3)]: CRR) (f[face(4)]: CRB) (f[face(5)]: CRL) (f[face(6)]: CRD) |= success) = true if allSame(CR) and allSame(CRT) and allSame(CRR) and allSame(CRB) and allSame(CRL) and allSame(CRD) .
+    op  Complete : -> Prop .
+    eq (f[face(1)]: CT1 CT1 CT1 CT1) (f[face(2)]: CT2 CT2 CT2 CT2) (f[face(3)]: CT3 CT3 CT3 CT3) (f[face(4)]: CT4 CT4 CT4 CT4) (f[face(5)]: CT5 CT5 CT5 CT5) (f[face(6)]: CT6 CT6 CT6 CT6) |= Complete = true .
+    eq X |= P = false  [owise] .
 
     op success : State -> Bool .
     ceq success((f[face(1)]: CR) (f[face(2)]: CRT) (f[face(3)]: CRR) (f[face(4)]: CRB) (f[face(5)]: CRL) (f[face(6)]: CRD)) = true if allSame(CR) and allSame(CRT) and allSame(CRR) and allSame(CRB) and allSame(CRL) and allSame(CRD) .
