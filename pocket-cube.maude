@@ -1,0 +1,12 @@
+load /home/ZhangXingYi/local/maude/model-checker.maude .
+load double.maude .
+load neighbor-2.maude .
+load cube-2.maude .
+search [1, 3] (
+    (f[face(1)]: C2 C2 C1 C1)
+    (f[face(2)]: C2 C2 C6 C6)
+    (f[face(3)]: C3 C3 C3 C3)
+    (f[face(4)]: C1 C1 C4 C4)
+    (f[face(5)]: C5 C5 C5 C5)
+    (f[face(6)]: C4 C4 C6 C6)
+    ) =>* S:State such that success(S:State) .
